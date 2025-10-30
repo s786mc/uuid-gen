@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online UUID Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+       font-size: 25px;
+        }
+        
+        .language-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .language-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .language-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .language-card:hover {
+            border-color: #667eea;
+            background: #f0f2f5;
+            transform: translateX(5px);
+        }
+        
+        .flag {
+            font-size: 1.5em;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .language-info {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .language-name {
+            font-weight: bold;
+            font-size: 1em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .language-desc {
+            font-size: 0.8em;
+            color: #666;
+            line-height: 1.3;
+        }
+#by {
+//ItsSadegh786MC
+color: black;
+border-color: purple;
+border-style: solid;
+border-radius: 16px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Online UUID Generator!</h1>
+        
+        <div class="language-title">Select Your Language:</div>
+        
+        <div class="language-list">
+            <a href="./lang-fa.html" class="language-card">
+                <div class="flag">🇮🇷</div>
+                <div class="language-info">
+                    <div class="language-name">پارسی</div>
+                    <div class="language-desc">UUID با پشتیبانی از زبان تو ، تولید</div>
+                </div>
+            </a>
+            
+            <a href="./lang-en.html" class="language-card">
+                <div class="flag">🇺🇸</div>
+                <div class="language-info">
+                    <div class="language-name">English</div>
+                    <div class="language-desc">UUID Generation, with your language support</div>
+                </div>
+            </a>
+            
+            <a href="./lang-ru.html" class="language-card">
+                <div class="flag">🇷🇺</div>
+                <div class="language-info">
+                    <div class="language-name">Русский</div>
+                    <div class="language-desc">Генерация UUID, с поддержкой вашего языка</div>
+                </div>
+            </a>
+            
+            <a href="./lang-zh.html" class="language-card">
+                <div class="flag">🇨🇳</div>
+                <div class="language-info">
+                    <div class="language-name">中文</div>
+                    <div class="language-desc">UUID生成，支持您的语言</div>
+                </div>
+            </a>
+            
+            <a href="./lang-ar.html" class="language-card">
+                <div class="flag">🇸🇦</div>
+                <div class="language-info">
+                    <div class="language-name">العربية</div>
+                    <div class="language-desc">إنشاء UUID، بدعم لغتك</div>
+                </div>
+            </a> <br> <br> 
+<h6 id="by">
+Created By Sadegh786MC
+</h6>
+        </div>
+    </div>
+</body>
+</html>

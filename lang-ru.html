@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн генератор UUID</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .uuid-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 19px;
+            border-color: skyblue;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            word-break: break-all;
+            direction: ltr;
+            transition: all 0.3s ease;
+        }
+        
+        .uuid-box:hover {
+            border-color: blue;
+            background: #f0f2f5;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #4CAF50 50%, #45a049 50%);
+        }
+        
+        .btn-batch {
+            background: linear-gradient(135deg, #FF9800 50%, #F57C00 50%);
+        }
+        .btn-new {
+            background: linear-gradient(135deg, #554694 50%, #764ba2 50%);
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            color: #666;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .batch-results {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            direction: ltr;
+        }
+        
+        .batch-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .validation {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .valid {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        #title {
+            font-size: 23px;
+            border-color: skyblue;
+            border-radius: 27px;
+            border-style: solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">!Онлайн генератор UUID</h1>
+        <p class="subtitle">
+          UUID версия 4
+        </p>
+        
+        <div class="uuid-box" id="uuidDisplay">
+            Создание нового UUID версии 4....
+        </div>
+        
+        <div class="timestamp" id="timestamp"></div>
+        
+        <div class="validation valid" id="validation">
+            Ваш браузер/устройство не поддерживает этот сайт! Ошибка 404
+        </div>
+        
+        <div>
+            <button class="btn btn-new" onclick="generateNewUUID()">
+                🔄 
+              Создать новый UUID
+            </button>
+            <button class="btn btn-copy" onclick="copyUUID()">
+                📋 
+              Копировать этот UUID
+            </button>
+            <button class="btn btn-batch" onclick="generateBatch()">
+                🚀
+              Сгенерировать 5 UUID
+            </button>
+        </div>
+        
+        <div id="batchContainer" style="display: none;">
+            <div class="batch-results" id="batchResults"></div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">Версия</div>
+                <div class="stat-value">UUID версия 4</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Длина символов</div>
+                <div class="stat-value">36</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Формат</div>
+                <div class="stat-value">8-4-4-4-12</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Безопасность</div>
+                <div class="stat-value">Хорошая</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Основная функция генерации UUID версии 4
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Функция проверки валидности UUID
+        function isValidUUID(uuid) {
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+            return uuidRegex.test(uuid);
+        }
+
+        // Отображение нового UUID
+        function displayUUID() {
+            const uuid = generateUUID();
+            const displayElement = document.getElementById('uuidDisplay');
+            const timestampElement = document.getElementById('timestamp');
+            const validationElement = document.getElementById('validation');
+            
+            displayElement.textContent = uuid;
+            timestampElement.textContent = `Создан: ${new Date().toLocaleString('ru-RU')}`;
+            
+            // Проверка валидности
+            if (isValidUUID(uuid)) {
+                validationElement.textContent = '✅ Валидность сгенерированного UUID: Этот UUID полностью валиден';
+                validationElement.className = 'validation valid';
+            } else {
+                validationElement.textContent = '❌ Валидность сгенерированного UUID: Невалидный UUID (пожалуйста, сгенерируйте заново)';
+                validationElement.className = 'validation invalid';
+            }
+            
+            // Скрытие пакетных результатов
+            document.getElementById('batchContainer').style.display = 'none';
+        }
+
+        // Генерация нового UUID
+        function generateNewUUID() {
+            displayUUID();
+        }
+
+        // Копирование UUID в буфер обмена
+        function copyUUID() {
+            const uuid = document.getElementById('uuidDisplay').textContent;
+            
+            navigator.clipboard.writeText(uuid).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ UUID скопирован в буфер обмена';
+                btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                }, 2000);
+            }).catch(err => {
+                // Резервный метод для старых браузеров
+                const textArea = document.createElement('textarea');
+                textArea.value = uuid;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`Скопировано: ${uuid}`);
+            });
+        }
+
+        // Пакетная генерация UUID
+        function generateBatch() {
+            const batchContainer = document.getElementById('batchContainer');
+            const batchResults = document.getElementById('batchResults');
+            
+            batchResults.innerHTML = '';
+            
+            for (let i = 0; i < 5; i++) {
+                const uuid = generateUUID();
+                const div = document.createElement('div');
+                div.className = 'batch-item';
+                div.textContent = `${i + 1}. ${uuid}`;
+                div.onclick = function() {
+                    navigator.clipboard.writeText(uuid);
+                    alert(`Скопировано: ${uuid}`);
+                };
+                batchResults.appendChild(div);
+            }
+            
+            batchContainer.style.display = 'block';
+        }
+
+        // Автоматическая генерация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            displayUUID();
+            
+            // Возможность копирования по клику на UUID
+            document.getElementById('uuidDisplay').addEventListener('click', copyUUID);
+        });
+
+        // Возможность использования горячих клавиш
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                generateNewUUID();
+            } else if (event.ctrlKey && event.code === 'KeyC') {
+                event.preventDefault();
+                copyUUID();
+            }
+        });
+    </script>
+</body>
+</html>
