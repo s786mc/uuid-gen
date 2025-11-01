@@ -214,7 +214,117 @@ Online UUID Generator!
             </div>
         </div>
     </div>
+<script>
+    // تابع اصلی تولید UUID نسخه 4
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 
+    // تابع اعتبارسنجی UUID
+    function isValidUUID(uuid) {
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        return uuidRegex.test(uuid);
+    }
+
+    // نمایش UUID جدید
+    function displayUUID() {
+        const uuid = generateUUID();
+        const displayElement = document.getElementById('uuidDisplay');
+        const timestampElement = document.getElementById('timestamp');
+        const validationElement = document.getElementById('validation');
+        
+        displayElement.textContent = uuid;
+        timestampElement.textContent = `تاریخ تولید: ${new Date().toLocaleString('fa-IR')}`;
+        
+        // اعتبارسنجی
+        if (isValidUUID(uuid)) {
+            validationElement.textContent = '✅ اعتبار UUID تولید شده: این UUID کاملاً معتبر است';
+            validationElement.className = 'validation valid';
+        } else {
+            validationElement.textContent = '❌ اعتبار UUID تولید شده: UUID نامعتبر (لطفا دوباره تولید کنید)';
+            validationElement.className = 'validation invalid';
+        }
+        
+        // پنهان کردن نتایج دسته‌ای
+        document.getElementById('batchContainer').style.display = 'none';
+    }
+
+    // تولید UUID جدید
+    function generateNewUUID() {
+        displayUUID();
+    }
+
+    // کپی UUID به کلیپ‌بورد
+    function copyUUID() {
+        const uuid = document.getElementById('uuidDisplay').textContent;
+        
+        navigator.clipboard.writeText(uuid).then(() => {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ UUID در کلیپ‌بورد شما کپی شد';
+            btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+            }, 2000);
+        }).catch(err => {
+            // Fallback برای مرورگرهای قدیمی
+            const textArea = document.createElement('textarea');
+            textArea.value = uuid;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert(`شما کپی کردید: ${uuid}`);
+        });
+    }
+
+    // تولید دسته‌ای UUID
+    function generateBatch() {
+        const batchContainer = document.getElementById('batchContainer');
+        const batchResults = document.getElementById('batchResults');
+        
+        batchResults.innerHTML = '';
+        
+        for (let i = 0; i < 5; i++) {
+            const uuid = generateUUID();
+            const div = document.createElement('div');
+            div.className = 'batch-item';
+            div.textContent = `${i + 1}. ${uuid}`;
+            div.onclick = function() {
+                navigator.clipboard.writeText(uuid);
+                alert(`شما کپی کردید: ${uuid}`);
+            };
+            batchResults.appendChild(div);
+        }
+        
+        batchContainer.style.display = 'block';
+    }
+
+    // تولید خودکار هنگام لود صفحه
+    document.addEventListener('DOMContentLoaded', function() {
+        displayUUID();
+        
+        // قابلیت کلیک روی UUID برای کپی
+        document.getElementById('uuidDisplay').addEventListener('click', copyUUID);
+    });
+
+    // قابلیت استفاده از کلیدهای کیبورد
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'Space') {
+            event.preventDefault();
+            generateNewUUID();
+        } else if (event.ctrlKey && event.code === 'KeyC') {
+            event.preventDefault();
+            copyUUID();
+        }
+    });
+    </script>
     <script>
         function displayUUID() {
             const uuid = generateUUID();
