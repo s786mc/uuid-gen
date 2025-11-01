@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オンラインUUIDジェネレーター</title>
+    <style>
+        /* स्टाइल वही रहेंगे, सिर्फ टेक्स्ट बदलेंगे */
+      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .uuid-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 19px;
+            border-color: skyblue;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            word-break: break-all;
+            direction: ltr;
+            transition: all 0.3s ease;
+        }
+        
+        .uuid-box:hover {
+            border-color: blue;
+            background: #f0f2f5;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #4CAF50 50%, #45a049 50%);
+        }
+        
+        .btn-batch {
+            background: linear-gradient(135deg, #FF9800 50%, #F57C00 50%);
+        }
+        .btn-new {
+            background: linear-gradient(135deg, #554694 50%, #764ba2 50%);
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            color: #666;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .batch-results {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            direction: ltr;
+        }
+        
+        .batch-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .validation {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .valid {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .timestamp {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        #title {
+            font-size: 23px;
+            border-color: skyblue;
+            border-radius: 27px;
+            border-style: solid;
+          }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">!オンラインUUIDジェネレーター</h1>
+        <p class="subtitle">
+          UUID バージョン 4
+        </p>
+        
+        <div class="uuid-box" id="uuidDisplay">
+            新しいUUIDバージョン4を作成中....
+        </div>
+        
+        <div class="timestamp" id="timestamp"></div>
+        
+        <div class="validation valid" id="validation">
+            お使いのブラウザ/デバイスはこのウェブサイトをサポートしていません！エラー404
+        </div>
+        
+        <div>
+            <button class="btn btn-new" onclick="generateNewUUID()">
+                🔄 
+              新しいUUIDを作成
+            </button>
+            <button class="btn btn-copy" onclick="copyUUID()">
+                📋 
+              このUUIDをコピー
+            </button>
+            <button class="btn btn-batch" onclick="generateBatch()">
+                🚀
+              5つのUUIDを生成
+            </button>
+        </div>
+        
+        <!-- बाकी कोड वही रहेगा, सिर्फ टेक्स्ट जापानी में -->
+        
+    </div>
+
+    <script>
+        // स्क्रिप्ट वही रहेगी, सिर्फ टेक्स्ट बदलेंगे
+        function displayUUID() {
+            // ...
+            timestampElement.textContent = `作成日時: ${new Date().toLocaleString('ja-JP')}`;
+            // ...
+        }
+      function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // UUID सत्यापन फ़ंक्शन
+        function isValidUUID(uuid) {
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+            return uuidRegex.test(uuid);
+        }
+
+        // नया UUID प्रदर्शित करें
+        function displayUUID() {
+            const uuid = generateUUID();
+            const displayElement = document.getElementById('uuidDisplay');
+            const timestampElement = document.getElementById('timestamp');
+            const validationElement = document.getElementById('validation');
+            
+            displayElement.textContent = uuid;
+            timestampElement.textContent = `बनाया गया: ${new Date().toLocaleString('hi-IN')}`;
+            
+            // सत्यापन
+            if (isValidUUID(uuid)) {
+                validationElement.textContent = '✅ उत्पन्न UUID की वैधता: यह UUID पूरी तरह से वैध है';
+                validationElement.className = 'validation valid';
+            } else {
+                validationElement.textContent = '❌ उत्पन्न UUID की वैधता: अमान्य UUID (कृपया पुन: उत्पन्न करें)';
+                validationElement.className = 'validation invalid';
+            }
+            
+            // बैच परिणाम छिपाएं
+            document.getElementById('batchContainer').style.display = 'none';
+        }
+
+        // नया UUID उत्पन्न करें
+        function generateNewUUID() {
+            displayUUID();
+        }
+
+        // क्लिपबोर्ड पर UUID कॉपी करें
+        function copyUUID() {
+            const uuid = document.getElementById('uuidDisplay').textContent;
+            
+            navigator.clipboard.writeText(uuid).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ क्लिपबोर्ड पर UUID कॉपी किया गया';
+                btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                }, 2000);
+            }).catch(err => {
+                // पुराने ब्राउज़रों के लिए फ़ॉलबैक
+                const textArea = document.createElement('textarea');
+                textArea.value = uuid;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`कॉपी किया गया: ${uuid}`);
+            });
+        }
+
+        // बैच UUID जनरेशन
+        function generateBatch() {
+            const batchContainer = document.getElementById('batchContainer');
+            const batchResults = document.getElementById('batchResults');
+            
+            batchResults.innerHTML = '';
+            
+            for (let i = 0; i < 5; i++) {
+                const uuid = generateUUID();
+                const div = document.createElement('div');
+                div.className = 'batch-item';
+                div.textContent = `${i + 1}. ${uuid}`;
+                div.onclick = function() {
+                    navigator.clipboard.writeText(uuid);
+                    alert(`कॉपी किया गया: ${uuid}`);
+                };
+                batchResults.appendChild(div);
+            }
+            
+            batchContainer.style.display = 'block';
+        }
+
+        // पेज लोड होने पर ऑटो जनरेशन
+        document.addEventListener('DOMContentLoaded', function() {
+            displayUUID();
+            
+            // कॉपी करने के लिए UUID पर क्लिक करने की सुविधा
+            document.getElementById('uuidDisplay').addEventListener('click', copyUUID);
+        });
+
+        // कीबोर्ड शॉर्टकट
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                generateNewUUID();
+            } else if (event.ctrlKey && event.code === 'KeyC') {
+                event.preventDefault();
+                copyUUID();
+            }
+        });
+    </script>
+</body>
+</html>
