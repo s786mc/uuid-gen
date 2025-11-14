@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wait a second ....</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, darkred 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+        .loading-container {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .language-list {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <h2>Detecting your language...</h2>
+        <p>Please wait a moment</p>
+        <div class="language-list">
+            Supported: EN, FA, AR, DE, ES, FR, HI, JA, KO, RU, TR, ZH
+        </div>
+    </div>
+
+    <script>
+        // آدرس پایه پروژه
+        const BASE_URL = 'https://s786mc.github.io/uuid-gen/';
+
+        // لیست کامل زبان‌های موجود
+        const availableLanguages = {
+            'ar': 'lang-ar.html',
+            'de': 'lang-de.html', 
+            'en': 'lang-en.html',
+            'es': 'lang-es.html',
+            'fa': 'lang-fa.html',
+            'fr': 'lang-fr.html',
+            'hi': 'lang-hi.html',
+            'ja': 'lang-ja.html',
+            'ko': 'lang-ko.html',
+            'ru': 'lang-ru.html',
+            'tr': 'lang-tr.html',
+            'zh': 'lang-zh.html'
+        };
+
+        // جدول مپینگ زبان‌های مرورگر به کدهای ما
+        const languageMapping = {
+            // فارسی و عربی
+            'fa': 'fa', 'fa-ir': 'fa', 'persian': 'fa',
+            'ar': 'ar', 'ar-sa': 'ar', 'arabic': 'ar',
+            
+            // اروپایی
+            'en': 'en', 'en-us': 'en', 'en-gb': 'en', 'english': 'en',
+            'de': 'de', 'de-de': 'de', 'german': 'de',
+            'es': 'es', 'es-es': 'es', 'spanish': 'es', 
+            'fr': 'fr', 'fr-fr': 'fr', 'french': 'fr',
+            'it': 'en', // ایتالیایی به انگلیسی (fallback)
+            
+            // آسیایی
+            'hi': 'hi', 'hi-in': 'hi', 'hindi': 'hi',
+            'ja': 'ja', 'ja-jp': 'ja', 'japanese': 'ja',
+            'ko': 'ko', 'ko-kr': 'ko', 'korean': 'ko',
+            'zh': 'zh', 'zh-cn': 'zh', 'zh-tw': 'zh', 'chinese': 'zh',
+            'ru': 'ru', 'ru-ru': 'ru', 'russian': 'ru',
+            'tr': 'tr', 'tr-tr': 'tr', 'turkish': 'tr'
+        };
+
+        // تابع هوشمند تشخیص زبان
+        function detectUserLanguage() {
+            console.log('🔍 Starting language detection...');
+
+            // 1. اولویت: پارامتر URL (مثل ?lang=fa)
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLang = urlParams.get('lang');
+            if (urlLang && availableLanguages[urlLang]) {
+                console.log('✅ Language from URL:', urlLang);
+                return urlLang;
+            }
+
+            // 2. اولویت: زبان ذخیره شده
+            const savedLang = localStorage.getItem('user-language');
+            if (savedLang && availableLanguages[savedLang]) {
+                console.log('✅ Language from storage:', savedLang);
+                return savedLang;
+            }
+
+            // 3. اولویت: زبان مرورگر
+            const browserLanguages = navigator.languages || [navigator.language || navigator.userLanguage || 'en'];
+            console.log('🌐 Browser languages:', browserLanguages);
+
+            for (let lang of browserLanguages) {
+                // پاک کردن منطقه (مثلاً en-US -> en)
+                const cleanLang = lang.split('-')[0].toLowerCase();
+                
+                // چک کردن مستقیم
+                if (availableLanguages[cleanLang]) {
+                    console.log('✅ Direct match found:', cleanLang);
+                    return cleanLang;
+                }
+                
+                // چک کردن از طریق مپینگ
+                if (languageMapping[lang.toLowerCase()]) {
+                    const mappedLang = languageMapping[lang.toLowerCase()];
+                    console.log('✅ Mapped language:', lang, '->', mappedLang);
+                    return mappedLang;
+                }
+                
+                // چک کردن clean version در مپینگ
+                if (languageMapping[cleanLang]) {
+                    const mappedLang = languageMapping[cleanLang];
+                    console.log('✅ Clean mapped language:', cleanLang, '->', mappedLang);
+                    return mappedLang;
+                }
+            }
+
+            // 4. تشخیص از طریق موقعیت
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            console.log('📍 Timezone:', timezone);
+            
+            if (timezone.includes('Tehran') || timezone.includes('Iran')) {
+                return 'fa';
+            }
+            if (timezone.includes('Turkey') || timezone.includes('Istanbul')) {
+                return 'tr';
+            }
+            if (timezone.includes('Arab') || timezone.includes('Dubai')) {
+                return 'ar';
+            }
+            if (timezone.includes('Russia') || timezone.includes('Moscow')) {
+                return 'ru';
+            }
+
+            // 5. پیش‌فرض
+            console.log('🌍 Default language: en');
+            return 'en';
+        }
+
+        // تابع هدایت هوشمند
+        function smartRedirect() {
+            const userLang = detectUserLanguage();
+            const targetPage = availableLanguages[userLang];
+            
+            if (!targetPage) {
+                console.error('❌ Target page not found for language:', userLang);
+                // Fallback به انگلیسی
+                window.location.href = BASE_URL + 'lang-en.html';
+                return;
+            }
+            
+            const fullURL = BASE_URL + targetPage;
+            console.log('🎯 Redirecting to:', fullURL);
+            
+            // ذخیره انتخاب کاربر
+            localStorage.setItem('user-language', userLang);
+            
+            // هدایت با تاخیر برای نمایش انیمیشن
+            setTimeout(() => {
+                window.location.href = fullURL;
+            }, 1500);
+        }
+
+        // اجرا وقتی صفحه لود شد
+        document.addEventListener('DOMContentLoaded', smartRedirect);
+
+        // همچنین اگر JavaScript غیرفعال بود
+        setTimeout(() => {
+            if (!window.location.href.includes('.html')) {
+                window.location.href = BASE_URL + 'lang-en.html';
+            }
+        }, 3000);
+    </script>
+</body>
+          </html>
